@@ -78,3 +78,9 @@
 .show {
 	display: block;
 }
+
+/* RESULTS */
+.results {
+	margin-bottom: 40px;
+	margin-top: 40px;
+}
