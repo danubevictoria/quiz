@@ -89,12 +89,12 @@ var prompt_values = [
 {
 	value: 'Disagree',
 	class: 'btn-default btn-disagree',
-	weight: 3
+	weight: -3
 },
 { 
 	value: 'Strongly Disagree',
 	class: 'btn-default btn-strongly-disagree',
-	weight: 5
+	weight: -5
 }
 ]
 
@@ -191,7 +191,7 @@ $('.value-btn').mousedown(function () {
 	var classArr = classList.split(" ");
 	// console.log(classArr);
 	var this_group = classArr[0];
-	console.log(this_group);
+	// console.log(this_group);
 
 	// If button is already selected, de-select it when clicked
 	// Otherwise, de-select any selected buttons in group and select the one just clicked
@@ -200,10 +200,11 @@ $('.value-btn').mousedown(function () {
 		total -= (findPromptWeight(prompts, this_group) * findValueWeight(prompt_values, $(this).text()));
 	} else {
 		// $('[class='thisgroup).prop('checked', false);
+		total -= (findPromptWeight(prompts, this_group) * findValueWeight(prompt_values, $('.'+this_group+'.active').text()));
+		// console.log($('.'+this_group+'.active').text());
 		$('.'+this_group).removeClass('active');
-		console.log($('.'+this_group));
-		total -= (findPromptWeight(prompts, this_group) * findValueWeight(prompt_values, $('.'+this_group).text()));
 
+		// console.log('group' + findValueWeight(prompt_values, $('.'+this_group).text()));
 		// $(this).prop('checked', true);
 		$(this).addClass('active');
 		total += (findPromptWeight(prompts, this_group) * findValueWeight(prompt_values, $(this).text()));
