@@ -61,27 +61,27 @@ var prompts = [
 var prompt_values = [
 {
 	value: 'Strongly Agree', 
-	class: 'btn-success',
+	class: 'btn-default btn-strongly-agree',
 	weight: 5
 },
 {
 	value: 'Agree',
-	class: 'btn-success',
+	class: 'btn-default btn-agree',
 	weight: 3,
 }, 
 {
 	value: 'Neutral', 
-	class: 'default',
+	class: 'btn-default',
 	weight: 0
 },
 {
 	value: 'Disagree',
-	class: 'btn-danger',
+	class: 'btn-default btn-disagree',
 	weight: 3
 },
 { 
 	value: 'Strongly Disagree',
-	class: 'btn-danger',
+	class: 'btn-default btn-strongly-disagree',
 	weight: 5
 }
 ]
@@ -103,20 +103,79 @@ function createPromptItems() {
 }
 
 // For each possible value, create a button for each to be inserted into each li of the quiz
-function createValueButtons() {
+// function createValueButtons() {
 	
+// 	for (var li_index = 0; li_index < prompts.length; li_index++) {
+// 		for (var i = 0; i < prompt_values.length; i++) {
+// 			var val_button = document.createElement('button');
+// 			var val_text = document.createTextNode(prompt_values[i].value);
+
+// 			val_button.setAttribute('class', 'value-btn btn ' + prompt_values[i].class);
+// 			val_button.appendChild(val_text);
+
+// 			document.getElementsByClassName('prompt')[li_index].appendChild(val_button);
+// 		}
+// 	}
+// }
+function createValueButtons() {
 	for (var li_index = 0; li_index < prompts.length; li_index++) {
+		var group = document.createElement('div');
+		group.className = 'btn-group btn-group-justified';
+
 		for (var i = 0; i < prompt_values.length; i++) {
-			var val_button = document.createElement('button');
-			var val_text = document.createTextNode(prompt_values[i].value);
+			var btn_group = document.createElement('div');
+			btn_group.className = 'btn-group';
 
-			val_button.setAttribute('class', 'col-md-offset-2 btn ' + prompt_values[i].class);
-			val_button.appendChild(val_text);
+			var button = document.createElement('button');
+			var button_text = document.createTextNode(prompt_values[i].value);
+			button.className = 'group' + li_index + ' value-btn btn ' + prompt_values[i].class;
+			button.appendChild(button_text);
 
-			document.getElementsByClassName('prompt')[li_index].appendChild(val_button);
+			btn_group.appendChild(button);
+			group.appendChild(btn_group);
+
+			document.getElementsByClassName('prompt')[li_index].appendChild(group);
 		}
 	}
 }
 
 createPromptItems();
 createValueButtons();
+
+$('.value-btn').mousedown(function () {
+	var classList = $(this).attr('class');
+	// console.log(classList);
+	var classArr = classList.split(" ");
+	// console.log(classArr);
+	var this_group = classArr[0];
+	console.log(this_group);
+
+	// If button is already selected, de-select it when clicked
+	// Otherwise, de-select any selected buttons in group and select the one just clicked
+	if($(this).hasClass('active')) {
+		$(this).removeClass('active');
+	} else {
+		// $('[class='thisgroup).prop('checked', false);
+		$('.'+this_group).removeClass('active');
+		console.log($('.'+this_group));
+		// $(this).prop('checked', true);
+		$(this).addClass('active');
+	}
+
+	// If there is already a selected button in this group, de-select it
+	// Otherwise, select it
+})
+
+// Hide the quiz after they submit their results
+$('#submit-btn').click(function () {
+	$('#quiz').addClass('hide');
+	$('#submit-btn').addClass('hide');
+	$('#retake-btn').removeClass('hide');
+})
+
+// Refresh the screen to show a new quiz if they click the retake quiz button
+$('#retake-btn').click(function () {
+	$('#quiz').removeClass('hide');
+	$('#submit-btn').removeClass('hide');
+	$('#retake-btn').addClass('hide');
+})
